@@ -1,0 +1,52 @@
+import java.util.*;
+public class HangmanGame {
+    private static final String[] WORD_LIST = {"apple", "banana", "cherry", "orange", "pear"};
+    
+    private static String chooseWord(String[] wordList) {
+        Random rand = new Random();
+        return wordList[rand.nextInt(wordList.length)];
+    }
+    
+    public static void main(String[] args) {
+        String word = chooseWord(WORD_LIST);
+        int wordLength = word.length();
+        int tries = 6;
+        List<Character> lettersGuessed = new ArrayList<Character>();
+        Scanner scanner = new Scanner(System.in);
+        while (tries > 0) {
+            // print current state of word
+            StringBuilder current = new StringBuilder();
+            for (int i = 0; i < wordLength; i++) {
+                char letter = word.charAt(i);
+                if (lettersGuessed.contains(letter)) {
+                    current.append(letter);
+                } else {
+                    current.append("_");
+                }
+            }
+            System.out.println("Current state: " + current);
+            
+            // get user input
+            System.out.print("Guess a letter: ");
+            char guess = scanner.next().charAt(0);
+            
+            // check if guess is correct
+            if (word.indexOf(guess) != -1) {
+                System.out.println("Correct!");
+                lettersGuessed.add(guess);
+            } else {
+                System.out.println("Incorrect!");
+                tries--;
+            }
+            
+            // check if player has won or lost
+            if (current.indexOf("_") == -1) {
+                System.out.println("Congratulations, you won!");
+                return;
+            } else if (tries == 0) {
+                System.out.println("Sorry, you lost. The word was " + word);
+                return;
+            }
+        }
+    }
+}
